@@ -7,15 +7,18 @@ key = int(input("key 입력 >> "))
 encrypt=''
 
 for i in plaintext :
+
     # 알파벳이 아닌 경우 (특수문자, 공백 등)
     if i.isalpha() == False :
         encrypt += i
+		
     # 대문자인 경우
     elif i.isupper() == True :
         c = chr(ord(i) + key)
         if ord(c) > 90 :
             c = chr(64 + key - (90 - ord(i)))
         encrypt += c
+		
     # 소문자
     else :
         c = chr(ord(i) + key)
@@ -40,15 +43,18 @@ key = int(input("Key 입력 >> "))
 plaintext = ''
 
 for i in encrypt :
+
     # 알파벳이 아닌 경우 (특수문자, 공백 등)
     if i.isalpha() == False :
         plaintext += i
+		
     # 대문자
     elif i.isupper() == True:
         c = chr(ord(i) - key)
         if ord(c) < 65 :
             c = chr(90 - key + (ord(i) - 64))
         plaintext += c
+		
     # 소문자
     else :
         c = chr(ord(i) - key)
