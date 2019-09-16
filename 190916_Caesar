@@ -1,0 +1,87 @@
+## 카이사르 암호화/복호화 코드
+``` python
+# CaesarCipher.py
+
+import pyperclip
+
+# 암호화/복호화 할 문자열
+message = input("암호화/복호화할 문자열 입력 >> ")
+
+# 암호화/복호화 키
+key = int(input("암호화/복호화 키 입력 >> "))
+
+# 암호화/복호화 모드 설정 (Set to either 'encrypt' or 'decrypt')
+mode = input("암호화/복호화 모드 설정 (encrypt / decrypt) >> ")
+
+# 암호화 대상이 되는 모든 글자
+SYMBOLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 !?.'
+
+# message를 암호화/복호화해 저장할 변수
+translated = ''
+
+for symbol in message :
+    # SYMBOLS 문자열에 있는 문자만 암호화/복호화 가능
+    if symbol in SYMBOLS :
+        symbolIndex = SYMBOLS.find(symbol)
+
+        # 암호화 복호화 수행
+        if mode == 'encrypt' :
+            translatedIndex = symbolIndex + key
+        elif mode == 'decrypt' :
+            translatedIndex = symbolIndex - key
+
+        # 필요 시 한 바퀴 돌아서 처리
+        if translatedIndex >= len(SYMBOLS) :
+            translatedIndex -= len(SYMBOLS)
+        elif translatedIndex < 0 :
+            translatedIndex += len(SYMBOLS)
+
+        translated += SYMBOLS[translatedIndex]
+    else :
+        # 암호화/복호화하지 않은 문자를 더함
+        translated += symbol
+
+# translated 문자열 출력
+print(translated)
+pyperclip.copy(translated)
+```
+SYMBOLS에 있는 문자만 암호화/복호화 가능하다.
+실행해서 암호화/복호화 할 문자열, 키, 암호화/복호화 모드를 입력해주면 된다.
+
+## 카이사르 Brute Force를 통해 평문 찾기
+``` python 
+# CaesarHacking.py
+
+message = input("암호문 입력 >> ")
+SYMBOLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 !?.'
+
+# 가능한 모든 키를 순회
+for key in range(len(SYMBOLS)) :
+    # translated에 공백 문자열을 넣어
+    # 이전 순회의 translated 값을 비우는 것이 중요
+    translated = ''
+
+    # 프로그램의 남은 부부은 카이사르 프로그램과 거의 유사
+
+    # message 안에 있는 각 심볼을 순회
+    for symbol in message :
+        if symbol in SYMBOLS :
+            symbolIndex = SYMBOLS.find(symbol)
+            translatedIndex = symbolIndex - key
+
+            # 경계선 다루기
+            if translatedIndex < 0 :
+                translatedIndex += len(SYMBOLS)
+
+            # 복호화 된 심볼을 더함
+            translated += SYMBOLS[translatedIndex]
+
+        else :
+            # 복호화 없이 심볼을 더함
+            translated += symbol
+
+    # 가능한 복호화를 모두 출력
+    print('Key #%s : %s' % (key, translated))
+```
+Key 66개(0 ~ 65)의 경우를 모두 출력하여 암호문의 평문을 찾을 수 있다.
+실행해서 암호문을 입력해주면 된다.
